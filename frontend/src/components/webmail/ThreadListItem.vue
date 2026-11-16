@@ -33,6 +33,9 @@
     >
       <span class="mail-mobile-subject">{{ thread.subject || $gettext('(no subject)') }}</span>
       <span class="mail-mobile-sender">{{ participantsLabel }}</span>
+      <span v-if="thread.tags?.length" class="mail-mobile-tags">
+        <TagChips :keywords="thread.tags" compact />
+      </span>
       <span class="mail-mobile-date">{{ thread.latest.date }}</span>
     </button>
     <span class="cell-sender" :title="participantsTitle">
