@@ -47,6 +47,9 @@
     >
       <span class="mail-mobile-subject">{{ email.subject || $gettext('(no subject)') }}</span>
       <span class="mail-mobile-sender">{{ senderName }}</span>
+      <span v-if="email.tags?.length" class="mail-mobile-tags">
+        <TagChips :keywords="email.tags" compact />
+      </span>
       <span class="mail-mobile-date">{{ date }}</span>
     </button>
     <span class="cell-sender" :title="senderTitle">{{ senderName }}</span>
