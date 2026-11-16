@@ -133,7 +133,7 @@
 
     <!-- Emptying a mailbox acts on the folder, not on a selection -->
     <v-btn
-      v-if="isTrashFolder"
+      v-if="isTrashFolder && !xs"
       icon="mdi-delete-sweep-outline"
       variant="text"
       size="small"
@@ -141,7 +141,7 @@
       @click="emptyMailbox"
     />
 
-    <template v-if="!inScheduledView">
+    <template v-if="!inScheduledView && !xs">
       <span class="mail-toolbar-separator" />
       <v-btn
         class="mail-mode"
@@ -186,6 +186,44 @@
       </v-btn>
       <span class="mail-toolbar-separator" />
     </template>
+
+    <!-- Keep the mobile search visible: move secondary toolbar actions into a menu. -->
+    <v-btn
+      v-if="xs && !hasSelection"
+      icon="mdi-dots-vertical"
+      variant="text"
+      size="small"
+      :title="$gettext('More actions')"
+      :aria-label="$gettext('More actions')"
+    >
+      <v-menu activator="parent">
+        <v-list density="compact">
+          <template v-if="!inScheduledView">
+            <v-list-subheader>{{ $gettext('Display mode') }}</v-list-subheader>
+            <v-list-item
+              prepend-icon="mdi-format-list-bulleted"
+              :active="!threadedMode"
+              :title="$gettext('Messages one by one')"
+              @click="changeListingMode('flat')"
+            />
+            <v-list-item
+              prepend-icon="mdi-forum-outline"
+              :active="threadedMode"
+              :disabled="!threadingAvailable"
+              :title="$gettext('Conversations')"
+              @click="changeListingMode('threaded')"
+            />
+          </template>
+          <v-divider v-if="isTrashFolder && !inScheduledView" />
+          <v-list-item
+            v-if="isTrashFolder"
+            prepend-icon="mdi-delete-sweep-outline"
+            :title="$gettext('Empty mailbox')"
+            @click="emptyMailbox"
+          />
+        </v-list>
+      </v-menu>
+    </v-btn>
 
     <div v-if="emails.results" class="mail-pagination">
       <span class="mail-range">
@@ -330,6 +368,7 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useDisplay } from 'vuetify'
 import { useGettext } from 'vue3-gettext'
 import { useBusStore, useWebmailStore } from '@/stores'
 import { useSpecialFolders } from '@/composables/webmail'
@@ -348,6 +387,7 @@ const props = defineProps({
 })
 
 const { $gettext, $ngettext } = useGettext()
+const { xs } = useDisplay()
 const { displayNotification } = useBusStore()
 const webmailStore = useWebmailStore()
 const router = useRouter()
