@@ -815,6 +815,14 @@ h6 {
       color: rgba(var(--v-theme-on-surface), 0.75);
     }
 
+    .mail-mobile-tags {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2px;
+      min-height: 12px;
+    }
+
     .mail-mobile-date {
       font-size: 0.75rem;
       color: rgba(var(--v-theme-on-surface), 0.6);
@@ -866,7 +874,8 @@ h6 {
     }
 
     .mail-range,
-    .mail-toolbar-separator {
+    .mail-toolbar-separator,
+    .mail-toolbar-spacer {
       display: none;
     }
   }
